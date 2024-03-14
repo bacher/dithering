@@ -1,9 +1,14 @@
-import { useRef } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
 import { ImagePicker } from '../ImagePicker/ImagePicker.tsx';
 
 import styles from './App.module.css';
-import { dithering, grayscale } from '../../processing/processing.ts';
+import {
+  threshold,
+  grayscale,
+  ditheringRandom,
+  ProcessingFunction,
+} from '../../processing/processing.ts';
 
 const CANVAS_WIDTH = 320;
 const CANVAS_HEIGHT = 320;
@@ -11,7 +16,37 @@ const CANVAS_HEIGHT = 320;
 export function App() {
   const canvasInputRef = useRef<HTMLCanvasElement>(null);
   const canvasGrayscaleRef = useRef<HTMLCanvasElement>(null);
-  const canvasDitheringRef = useRef<HTMLCanvasElement>(null);
+  const canvasThresholdRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringRandomRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringRandomAnimatedRef = useRef<HTMLCanvasElement>(null);
+
+  const grayscaleImageDataRef = useRef<ImageData | undefined>();
+  const temporalImageDataRef = useRef<ImageData | undefined>();
+
+  function renderFrame(
+    canvasRef: RefObject<HTMLCanvasElement>,
+    func: ProcessingFunction,
+  ) {
+    const ctx = canvasRef.current!.getContext('2d', {
+      alpha: false,
+    })!;
+
+    func(grayscaleImageDataRef.current!, temporalImageDataRef.current!);
+
+    ctx.putImageData(temporalImageDataRef.current!, 0, 0);
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (grayscaleImageDataRef.current) {
+        renderFrame(canvasDitheringRandomAnimatedRef, ditheringRandom);
+      }
+    }, 44);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <div className={styles.root}>
@@ -21,9 +56,6 @@ export function App() {
             alpha: false,
           })!;
           const ctxGrayscale = canvasGrayscaleRef.current!.getContext('2d', {
-            alpha: false,
-          })!;
-          const ctxDithering = canvasDitheringRef.current!.getContext('2d', {
             alpha: false,
           })!;
 
@@ -42,18 +74,24 @@ export function App() {
 
           const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-          const outputImageData = ctx.createImageData(
+          const grayscaleImageData = ctx.createImageData(
             CANVAS_WIDTH,
             CANVAS_HEIGHT,
           );
 
-          grayscale(imageData, outputImageData);
+          grayscale(imageData, grayscaleImageData);
+          grayscaleImageDataRef.current = grayscaleImageData;
 
-          ctxGrayscale.putImageData(outputImageData, 0, 0);
+          ctxGrayscale.putImageData(grayscaleImageData, 0, 0);
 
-          dithering(outputImageData, outputImageData);
+          temporalImageDataRef.current = ctx.createImageData(
+            CANVAS_WIDTH,
+            CANVAS_HEIGHT,
+          );
 
-          ctxDithering.putImageData(outputImageData, 0, 0);
+          renderFrame(canvasThresholdRef, threshold);
+          renderFrame(canvasDitheringRandomRef, ditheringRandom);
+          renderFrame(canvasDitheringRandomAnimatedRef, ditheringRandom);
         }}
       />
       <div className={styles.frames}>
@@ -68,7 +106,17 @@ export function App() {
           height={CANVAS_HEIGHT}
         />
         <canvas
-          ref={canvasDitheringRef}
+          ref={canvasThresholdRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringRandomRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringRandomAnimatedRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
         />

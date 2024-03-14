@@ -4,3 +4,8 @@
   gap: 16px;
   align-items: start;
 }
+
+.frames {
+  display: flex;
+  gap: 16px;
+}

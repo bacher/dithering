@@ -33,7 +33,7 @@ export function ImagePicker({ onImageLoaded }: ImagePickerProps) {
       Select a picture:{' '}
       <input
         type="file"
-        accept="image/png, image/jpeg"
+        accept="image/*"
         onChange={(event) => {
           const file = event.target.files?.[0];
 

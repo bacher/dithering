@@ -8,6 +8,11 @@ import {
   grayscale,
   ditheringRandom,
   ProcessingFunction,
+  ditheringTimed,
+  ditheringTimed2,
+  ditheringTimed3,
+  ditheringTimed4,
+  ditheringTimed5,
 } from '../../processing/processing.ts';
 
 const CANVAS_WIDTH = 320;
@@ -19,6 +24,16 @@ export function App() {
   const canvasThresholdRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringRandomRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringRandomAnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimedAnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed2AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed3AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed4AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed5AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed6AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed7AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed8AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed9AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimedTmpAnimatedRef = useRef<HTMLCanvasElement>(null);
 
   const grayscaleImageDataRef = useRef<ImageData | undefined>();
   const temporalImageDataRef = useRef<ImageData | undefined>();
@@ -45,6 +60,81 @@ export function App() {
 
     return () => {
       clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    let requestAnimationFrameId: number;
+
+    const runs = [
+      {
+        canvas: canvasDitheringTimedAnimatedRef.current!,
+        logic: ditheringTimed,
+      },
+      {
+        canvas: canvasDitheringTimed2AnimatedRef.current!,
+        logic: ditheringTimed2,
+      },
+      {
+        canvas: canvasDitheringTimed3AnimatedRef.current!,
+        logic: ditheringTimed3,
+      },
+      {
+        canvas: canvasDitheringTimed4AnimatedRef.current!,
+        logic: ditheringTimed4,
+      },
+      {
+        canvas: canvasDitheringTimed5AnimatedRef.current!,
+        logic: ditheringTimed5(11),
+      },
+      {
+        canvas: canvasDitheringTimed6AnimatedRef.current!,
+        logic: ditheringTimed5(46),
+      },
+      {
+        canvas: canvasDitheringTimed7AnimatedRef.current!,
+        logic: ditheringTimed5(1021),
+      },
+      {
+        canvas: canvasDitheringTimed8AnimatedRef.current!,
+        logic: ditheringTimed5(46, 60),
+      },
+      {
+        canvas: canvasDitheringTimed9AnimatedRef.current!,
+        logic: ditheringTimed5(46, 30),
+      },
+      {
+        canvas: canvasDitheringTimedTmpAnimatedRef.current!,
+        logic: ditheringTimed5(undefined),
+      },
+    ];
+
+    function render() {
+      const now = performance.now();
+
+      if (grayscaleImageDataRef.current && temporalImageDataRef.current) {
+        for (const { canvas, logic } of runs) {
+          const ctx = canvas.getContext('2d', {
+            alpha: false,
+          })!;
+
+          logic(
+            grayscaleImageDataRef.current,
+            temporalImageDataRef.current,
+            now,
+          );
+
+          ctx.putImageData(temporalImageDataRef.current, 0, 0);
+        }
+      }
+
+      requestAnimationFrameId = requestAnimationFrame(render);
+    }
+
+    render();
+
+    return () => {
+      cancelAnimationFrame(requestAnimationFrameId);
     };
   }, []);
 
@@ -117,6 +207,57 @@ export function App() {
         />
         <canvas
           ref={canvasDitheringRandomAnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimedAnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed2AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed3AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed4AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed5AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed6AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed7AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed8AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed9AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <div className={styles.splitter} />
+        <canvas
+          ref={canvasDitheringTimedTmpAnimatedRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
         />

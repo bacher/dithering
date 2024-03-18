@@ -13,6 +13,8 @@ import {
   ditheringTimed3,
   ditheringTimed4,
   ditheringTimed5,
+  ditheringTimed6,
+  ditheringTimed7,
 } from '../../processing/processing.ts';
 
 const CANVAS_WIDTH = 320;
@@ -33,7 +35,8 @@ export function App() {
   const canvasDitheringTimed7AnimatedRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringTimed8AnimatedRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringTimed9AnimatedRef = useRef<HTMLCanvasElement>(null);
-  const canvasDitheringTimedTmpAnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed10AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed11AnimatedRef = useRef<HTMLCanvasElement>(null);
 
   const grayscaleImageDataRef = useRef<ImageData | undefined>();
   const temporalImageDataRef = useRef<ImageData | undefined>();
@@ -104,8 +107,12 @@ export function App() {
         logic: ditheringTimed5(46, 30),
       },
       {
-        canvas: canvasDitheringTimedTmpAnimatedRef.current!,
-        logic: ditheringTimed5(undefined),
+        canvas: canvasDitheringTimed10AnimatedRef.current!,
+        logic: ditheringTimed6(60),
+      },
+      {
+        canvas: canvasDitheringTimed11AnimatedRef.current!,
+        logic: ditheringTimed7(60),
       },
     ];
 
@@ -257,7 +264,12 @@ export function App() {
         />
         <div className={styles.splitter} />
         <canvas
-          ref={canvasDitheringTimedTmpAnimatedRef}
+          ref={canvasDitheringTimed10AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed11AnimatedRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
         />

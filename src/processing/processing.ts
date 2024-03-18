@@ -173,6 +173,7 @@ const palette = [
   /* 07 */ [1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
   /* 08 */ [1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
   /* 09 */ [1, 1, 1, 1, 1, 1, 0, 1, 1, 1],
+  /* 10 */ [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
 const hz120 = 1000 / 120;
@@ -196,7 +197,7 @@ export function ditheringTimed4(
       const value = Math.min(1, gray / 256);
 
       const paletteIndex = Math.min(9, Math.floor(value * 10));
-      const sampleIndex = Math.floor(interpolation * 10);
+      const sampleIndex = Math.round(interpolation * 10);
 
       const out = palette[paletteIndex][sampleIndex] * 255;
 
@@ -244,6 +245,104 @@ export const ditheringTimed5 =
         const sampleIndex = Math.floor(cellInterpolation * 10);
 
         const out = palette[paletteIndex][sampleIndex] * 255;
+
+        output[offset] = out;
+        output[offset + 1] = out;
+        output[offset + 2] = out;
+        output[offset + 3] = 255;
+      }
+    }
+  };
+
+const paletteDynamic = [
+  /* 00 */ [0],
+  /* 01 */ [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  /* 02 */ [0, 1, 0, 0, 0],
+  /* 03 */ [0, 1, 0],
+  /* 04 */ [0, 1, 0, 1, 0],
+  /* 05 */ [0, 1],
+  /* 06 */ [1, 0, 1, 1, 0],
+  /* 07 */ [1, 1, 0],
+  /* 08 */ [1, 1, 1, 0, 1],
+  /* 09 */ [1, 1, 1, 1, 1, 1, 0, 1, 1, 1],
+  /* 10 */ [1],
+];
+
+export const ditheringTimed6 =
+  (hertz = 120) =>
+  (
+    imageData: ImageData,
+    outputImageData: ImageData,
+    timeTick: number,
+  ): void => {
+    const input = imageData.data;
+    const output = outputImageData.data;
+
+    const interpolation = ((timeTick / (1000 / hertz)) % 30) / 30;
+
+    for (let y = 0; y < imageData.height; y += 1) {
+      for (let x = 0; x < imageData.width; x += 1) {
+        const index = y * imageData.width + x;
+        const offset = index * 4;
+
+        const gray = input[offset] * 1.1;
+        const value = Math.min(1, gray / 256);
+
+        const paletteIndex = Math.min(9, Math.floor(value * 10));
+        const group = paletteDynamic[paletteIndex];
+
+        const sampleIndex = Math.round(interpolation * group.length);
+
+        const out = group[sampleIndex] * 255;
+
+        output[offset] = out;
+        output[offset + 1] = out;
+        output[offset + 2] = out;
+        output[offset + 3] = 255;
+      }
+    }
+  };
+
+const paletteDynamic2 = [
+  /* 00 */ [0],
+  /* 01 */ [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  /* 02 */ [0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+  /* 03 */ [0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+  /* 04 */ [0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+  /* 05 */ [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+  /* 06 */ [0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+  /* 07 */ [0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+  /* 08 */ [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+  /* 09 */ [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  /* 10 */ [1],
+];
+
+export const ditheringTimed7 =
+  (hertz = 120) =>
+  (
+    imageData: ImageData,
+    outputImageData: ImageData,
+    timeTick: number,
+  ): void => {
+    const input = imageData.data;
+    const output = outputImageData.data;
+
+    const interpolation = ((timeTick / (1000 / hertz)) % 30) / 30;
+
+    for (let y = 0; y < imageData.height; y += 1) {
+      for (let x = 0; x < imageData.width; x += 1) {
+        const index = y * imageData.width + x;
+        const offset = index * 4;
+
+        const gray = input[offset] * 1.1;
+        const value = Math.min(1, gray / 256);
+
+        const paletteIndex = Math.min(9, Math.floor(value * 10));
+        const group = paletteDynamic2[paletteIndex];
+
+        const sampleIndex = Math.round(interpolation * group.length);
+
+        const out = group[sampleIndex] * 255;
 
         output[offset] = out;
         output[offset + 1] = out;

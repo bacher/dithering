@@ -351,3 +351,235 @@ export const ditheringTimed7 =
       }
     }
   };
+
+const levels = [
+  10,
+  10 + 9,
+  10 + 9 + 8,
+  10 + 9 + 8 + 7,
+  10 + 9 + 8 + 7 + 6,
+  10 + 9 + 8 + 7 + 6 + 5,
+  10 + 9 + 8 + 7 + 6 + 5 + 4,
+  10 + 9 + 8 + 7 + 6 + 5 + 4 + 3,
+  10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2,
+  10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1,
+];
+
+const fullRound = levels[levels.length - 1];
+
+export const ditheringTimed8 =
+  (hertz = 120) =>
+  (
+    imageData: ImageData,
+    outputImageData: ImageData,
+    timeTick: number,
+  ): void => {
+    const input = imageData.data;
+    const output = outputImageData.data;
+
+    const step = (timeTick / (1000 / hertz)) % fullRound;
+
+    let activeIndex = 0;
+
+    for (let i = 0; i < levels.length; i += 1) {
+      if (step < levels[i]) {
+        activeIndex = i;
+        break;
+      }
+    }
+
+    const activeRange = {
+      start: (activeIndex - 0.5) / levels.length,
+      end: (activeIndex + 1 + 0.5) / levels.length,
+    };
+
+    for (let y = 0; y < imageData.height; y += 1) {
+      for (let x = 0; x < imageData.width; x += 1) {
+        const index = y * imageData.width + x;
+        const offset = index * 4;
+
+        const gray = input[offset] * 1.1;
+        const value = Math.min(1, gray / 256);
+
+        let out = 0;
+
+        if (value >= activeRange.start && value < activeRange.end) {
+          out = 255;
+        }
+
+        output[offset] = out;
+        output[offset + 1] = out;
+        output[offset + 2] = out;
+        output[offset + 3] = 255;
+      }
+    }
+  };
+
+export const ditheringTimed9 =
+  (hertz = 120) =>
+  (
+    imageData: ImageData,
+    outputImageData: ImageData,
+    timeTick: number,
+  ): void => {
+    const input = imageData.data;
+    const output = outputImageData.data;
+
+    const step = (timeTick / (1000 / hertz)) % fullRound;
+
+    let activeIndex = 0;
+
+    for (let i = 0; i < levels.length; i += 1) {
+      if (step < levels[i]) {
+        activeIndex = i;
+        break;
+      }
+    }
+
+    const invertedActiveIndex = levels.length - activeIndex;
+
+    const activeRange = {
+      start: (invertedActiveIndex - 0.5) / levels.length,
+      end: (invertedActiveIndex + 1 + 0.5) / levels.length,
+    };
+
+    for (let y = 0; y < imageData.height; y += 1) {
+      for (let x = 0; x < imageData.width; x += 1) {
+        const index = y * imageData.width + x;
+        const offset = index * 4;
+
+        const gray = input[offset] * 1.1;
+        const value = Math.min(1, gray / 256);
+
+        let out = 0;
+
+        if (value >= activeRange.start && value < activeRange.end) {
+          out = 255;
+        }
+
+        output[offset] = out;
+        output[offset + 1] = out;
+        output[offset + 2] = out;
+        output[offset + 3] = 255;
+      }
+    }
+  };
+
+const levelsCycled = [
+  8,
+  10 + 9,
+  10 + 9 + 8,
+  10 + 9 + 8 + 7,
+  10 + 9 + 8 + 7 + 6,
+  10 + 9 + 8 + 7 + 6 + 5,
+  10 + 9 + 8 + 7 + 6 + 5 + 4,
+  10 + 9 + 8 + 7 + 6 + 5 + 4 + 3,
+  10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2,
+  10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 2,
+];
+
+export const ditheringTimed10 =
+  (hertz = 120) =>
+  (
+    imageData: ImageData,
+    outputImageData: ImageData,
+    timeTick: number,
+  ): void => {
+    const input = imageData.data;
+    const output = outputImageData.data;
+
+    let step = (timeTick / (1000 / hertz)) % (fullRound * 2);
+
+    if (step > fullRound) {
+      step = 2 * fullRound - step;
+    }
+
+    let activeIndex = 0;
+
+    for (let i = 0; i < levelsCycled.length; i += 1) {
+      if (step < levelsCycled[i]) {
+        activeIndex = i;
+        break;
+      }
+    }
+
+    const activeRange = {
+      start: (activeIndex - 0.5) / levelsCycled.length,
+      end: (activeIndex + 1 + 0.5) / levelsCycled.length,
+    };
+
+    for (let y = 0; y < imageData.height; y += 1) {
+      for (let x = 0; x < imageData.width; x += 1) {
+        const index = y * imageData.width + x;
+        const offset = index * 4;
+
+        const gray = input[offset] * 1.1;
+        const value = Math.min(1, gray / 256);
+
+        let out = 0;
+
+        if (value >= activeRange.start && value < activeRange.end) {
+          out = 255;
+        }
+
+        output[offset] = out;
+        output[offset + 1] = out;
+        output[offset + 2] = out;
+        output[offset + 3] = 255;
+      }
+    }
+  };
+
+export const ditheringTimed11 =
+  (hertz = 120) =>
+  (
+    imageData: ImageData,
+    outputImageData: ImageData,
+    timeTick: number,
+  ): void => {
+    const input = imageData.data;
+    const output = outputImageData.data;
+
+    let step = (timeTick / (1000 / hertz)) % (fullRound * 2);
+
+    if (step > fullRound) {
+      step = 2 * fullRound - step;
+    }
+
+    let activeIndex = 0;
+
+    for (let i = 0; i < levelsCycled.length; i += 1) {
+      if (step < levelsCycled[i]) {
+        activeIndex = i;
+        break;
+      }
+    }
+
+    const invertedActiveIndex = levelsCycled.length - activeIndex;
+
+    const activeRange = {
+      start: (invertedActiveIndex - 0.5) / levelsCycled.length,
+      end: (invertedActiveIndex + 1 + 0.5) / levelsCycled.length,
+    };
+
+    for (let y = 0; y < imageData.height; y += 1) {
+      for (let x = 0; x < imageData.width; x += 1) {
+        const index = y * imageData.width + x;
+        const offset = index * 4;
+
+        const gray = input[offset] * 1.1;
+        const value = Math.min(1, gray / 256);
+
+        let out = 0;
+
+        if (value >= activeRange.start && value < activeRange.end) {
+          out = 255;
+        }
+
+        output[offset] = out;
+        output[offset + 1] = out;
+        output[offset + 2] = out;
+        output[offset + 3] = 255;
+      }
+    }
+  };

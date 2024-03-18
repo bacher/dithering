@@ -15,6 +15,10 @@ import {
   ditheringTimed5,
   ditheringTimed6,
   ditheringTimed7,
+  ditheringTimed8,
+  ditheringTimed9,
+  ditheringTimed10,
+  ditheringTimed11,
 } from '../../processing/processing.ts';
 
 const CANVAS_WIDTH = 320;
@@ -37,6 +41,10 @@ export function App() {
   const canvasDitheringTimed9AnimatedRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringTimed10AnimatedRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringTimed11AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed12AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed13AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed14AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringTimed15AnimatedRef = useRef<HTMLCanvasElement>(null);
 
   const grayscaleImageDataRef = useRef<ImageData | undefined>();
   const temporalImageDataRef = useRef<ImageData | undefined>();
@@ -113,6 +121,22 @@ export function App() {
       {
         canvas: canvasDitheringTimed11AnimatedRef.current!,
         logic: ditheringTimed7(60),
+      },
+      {
+        canvas: canvasDitheringTimed12AnimatedRef.current!,
+        logic: ditheringTimed8(undefined),
+      },
+      {
+        canvas: canvasDitheringTimed13AnimatedRef.current!,
+        logic: ditheringTimed9(undefined),
+      },
+      {
+        canvas: canvasDitheringTimed14AnimatedRef.current!,
+        logic: ditheringTimed10(),
+      },
+      {
+        canvas: canvasDitheringTimed15AnimatedRef.current!,
+        logic: ditheringTimed11(),
       },
     ];
 
@@ -262,7 +286,6 @@ export function App() {
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
         />
-        <div className={styles.splitter} />
         <canvas
           ref={canvasDitheringTimed10AnimatedRef}
           width={CANVAS_WIDTH}
@@ -273,6 +296,27 @@ export function App() {
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
         />
+        <canvas
+          ref={canvasDitheringTimed12AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed13AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed14AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringTimed15AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        {/*<div className={styles.splitter} />*/}
       </div>
     </div>
   );

@@ -20,6 +20,12 @@ import {
   ditheringTimed10,
   ditheringTimed11,
 } from '../../processing/processing.ts';
+import {
+  ditheringPattern,
+  ditheringPattern2,
+  ditheringPattern2Animated,
+  ditheringPattern2Animated2,
+} from '../../processing/ditheringPattern.ts';
 
 const CANVAS_WIDTH = 320;
 const CANVAS_HEIGHT = 320;
@@ -45,6 +51,10 @@ export function App() {
   const canvasDitheringTimed13AnimatedRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringTimed14AnimatedRef = useRef<HTMLCanvasElement>(null);
   const canvasDitheringTimed15AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringPatternRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringPattern2Ref = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringPattern2AnimatedRef = useRef<HTMLCanvasElement>(null);
+  const canvasDitheringPattern2Animated2Ref = useRef<HTMLCanvasElement>(null);
 
   const grayscaleImageDataRef = useRef<ImageData | undefined>();
   const temporalImageDataRef = useRef<ImageData | undefined>();
@@ -138,6 +148,14 @@ export function App() {
         canvas: canvasDitheringTimed15AnimatedRef.current!,
         logic: ditheringTimed11(),
       },
+      {
+        canvas: canvasDitheringPattern2AnimatedRef.current!,
+        logic: ditheringPattern2Animated(4),
+      },
+      {
+        canvas: canvasDitheringPattern2Animated2Ref.current!,
+        logic: ditheringPattern2Animated2(4),
+      },
     ];
 
     function render() {
@@ -213,6 +231,8 @@ export function App() {
           renderFrame(canvasThresholdRef, threshold);
           renderFrame(canvasDitheringRandomRef, ditheringRandom);
           renderFrame(canvasDitheringRandomAnimatedRef, ditheringRandom);
+          renderFrame(canvasDitheringPatternRef, ditheringPattern());
+          renderFrame(canvasDitheringPattern2Ref, ditheringPattern2());
         }}
       />
       <div className={styles.frames}>
@@ -316,7 +336,27 @@ export function App() {
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
         />
-        {/*<div className={styles.splitter} />*/}
+        <div className={styles.splitter} />
+        <canvas
+          ref={canvasDitheringPatternRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringPattern2Ref}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringPattern2AnimatedRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
+        <canvas
+          ref={canvasDitheringPattern2Animated2Ref}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+        />
       </div>
     </div>
   );
